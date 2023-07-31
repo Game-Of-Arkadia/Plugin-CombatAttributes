@@ -1,6 +1,9 @@
 name: WeaponsAttributes
 version: '${project.version}'
-main: fr.keykatyu.weaponsattributes.WeaponsAttributes
+main: fr.keykatyu.weaponsattributes.Main
 api-version: '1.20'
 authors: [KeyKatyu]
 description: Fix weapons attributes (lore)
+commands:
+  fix-attributes:
+    description: Fix weapon attributes in the lore
