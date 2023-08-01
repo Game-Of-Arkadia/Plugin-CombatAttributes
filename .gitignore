@@ -15,3 +15,4 @@
 /target/WeaponsAttributes-1.0-SNAPSHOT-remapped.jar
 /target/WeaponsAttributes-1.0-SNAPSHOT-remapped-obf.jar
 /target/classes/fr/keykatyu/weaponsattributes/listener/WeaponsAttributesListener.class
+/target/classes/fr/keykatyu/weaponsattributes/util/Util.class
