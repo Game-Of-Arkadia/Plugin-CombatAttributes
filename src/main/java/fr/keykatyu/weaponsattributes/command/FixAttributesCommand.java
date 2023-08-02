@@ -22,6 +22,11 @@ public class FixAttributesCommand implements CommandExecutor {
         }
 
         ItemStack previousItem = player.getInventory().getItemInMainHand();
+        if(!Util.isCustomItem(previousItem)) {
+            sender.sendMessage(Util.prefix() + "§cCet item n'est pas un item custom.");
+            return false;
+        }
+
         ItemStack newItem = new Weapon(player.getInventory().getItemInMainHand().clone(), player).getUpdatedItem();
         player.getInventory().setItemInMainHand(newItem);
         TextComponent textComponent = new TextComponent();

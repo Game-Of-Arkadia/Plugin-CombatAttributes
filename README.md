@@ -13,5 +13,9 @@ Fix items attributes and update lore.
 
 **Nothing.**
 
+## Documentation
+
+- [How does the plugin work ?](documentation/HOWITWORKS.md)
+
 ## Dependencies
 - **MCTranslator by KeyKatyu**
