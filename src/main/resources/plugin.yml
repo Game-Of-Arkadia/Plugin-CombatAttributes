@@ -6,4 +6,4 @@ authors: [KeyKatyu]
 description: Fix weapons attributes (lore)
 commands:
   fix-attributes:
-    description: Fix weapon attributes in the lore
+    description: Fix items attributes and update lore
