@@ -4,9 +4,12 @@ import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.mctranslation.MCTranslator;
 import fr.keykatyu.weaponsattributes.Main;
 import fr.keykatyu.weaponsattributes.util.ItemBuilder;
+import fr.keykatyu.weaponsattributes.util.Util;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemSword;
+import net.minecraft.world.item.ItemTool;
 import net.minecraft.world.item.ItemToolMaterial;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
@@ -18,6 +21,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class Weapon {
@@ -26,6 +30,7 @@ public class Weapon {
     private final ItemBuilder ib;
     private final Player owner;
     private final Language language;
+    private static final DecimalFormat df = new DecimalFormat("0.#");
 
     public Weapon(ItemStack item, Player owner) {
         this.itemStack = item;
@@ -63,8 +68,8 @@ public class Weapon {
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(ib.toItemStack());
         weaponsAttributes.add("");
         weaponsAttributes.add("§7" + MCTranslator.translate("item.modifiers.mainhand", language));
-        weaponsAttributes.add(" §2" + getAttackDamage(nmsItem) + " " + MCTranslator.translate("attribute.name.generic.attack_damage", language));
-        weaponsAttributes.add(" §2" + getAttackSpeed(nmsItem) + " " + MCTranslator.translate("attribute.name.generic.attack_speed", language));
+        weaponsAttributes.add(" §2" + df.format(getAttackDamage(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.attack_damage", language));
+        weaponsAttributes.add(" §2" + df.format(getAttackSpeed(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.attack_speed", language));
 
         HashMap<EquipmentSlot, List<Attribute>> attributes = getAttributes();
         if(attributes.containsKey(EquipmentSlot.HAND)) attributes.get(EquipmentSlot.HAND).forEach(attribute -> weaponsAttributes.add(attribute.renderDisplay()));
@@ -114,13 +119,13 @@ public class Weapon {
      * @param item The NMS ItemStack
      * @return The item attack damage
      */
-    private long getAttackDamage(net.minecraft.world.item.ItemStack item) {
+    private double getAttackDamage(net.minecraft.world.item.ItemStack item) {
         double attackDamage = 1.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) attackDamage += modifier.d();
         attackDamage += net.minecraft.world.item.enchantment.EnchantmentManager.a(item, null);
         attackDamage *= ((CraftPlayer) owner).getHandle().A(0.5F);
         attackDamage = Math.round(attackDamage * 10.0) / 10.0;
-        return Math.round(attackDamage);
+        return attackDamage;
     }
 
     /**
@@ -128,11 +133,11 @@ public class Weapon {
      * @param item The NMS ItemStack
      * @return The item attack speed
      */
-    private long getAttackSpeed(net.minecraft.world.item.ItemStack item) {
+    private double getAttackSpeed(net.minecraft.world.item.ItemStack item) {
         double attackSpeed = 1.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.h)) attackSpeed += modifier.d();
         attackSpeed = Math.round(attackSpeed * 10.0) / 10.0;
-        return Math.round(attackSpeed);
+        return attackSpeed;
     }
 
     public static class Attribute {
@@ -150,14 +155,14 @@ public class Weapon {
         public String renderDisplay() {
             if(value > 0) {
                 if (operation.equals(AttributeModifier.Operation.ADD_NUMBER)) {
-                    return "§9+" + Math.round(value) + " " + name;
+                    return "§9+" + df.format(value) + " " + name;
                 }
-                return "§9+" + Math.round(value * 100) + "% " + name;
+                return "§9+" + df.format(value * 100) + "% " + name;
             } else {
                 if (operation.equals(AttributeModifier.Operation.ADD_NUMBER)) {
-                    return "§c-" + Math.round(value) + " " + name;
+                    return "§c-" + df.format(value) + " " + name;
                 }
-                return "§c-" + Math.round(value * 100) + "% " + name;
+                return "§c-" + df.format(value * 100) + "% " + name;
             }
         }
     }
