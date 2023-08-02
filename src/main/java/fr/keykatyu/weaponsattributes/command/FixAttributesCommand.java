@@ -22,7 +22,7 @@ public class FixAttributesCommand implements CommandExecutor {
         }
 
         ItemStack previousItem = player.getInventory().getItemInMainHand();
-        ItemStack newItem = new Weapon(player.getInventory().getItemInMainHand(), player).getUpdatedItem();
+        ItemStack newItem = new Weapon(player.getInventory().getItemInMainHand().clone(), player).getUpdatedItem();
         player.getInventory().setItemInMainHand(newItem);
         TextComponent textComponent = new TextComponent();
         textComponent.setText(Util.prefix() + " §aVotre item a bien été mis à jour. Vous pouvez passer votre souris sur ce message " +
