@@ -10,14 +10,18 @@
     <packaging>jar</packaging>
 
     <name>WeaponsAttributes</name>
+    <description>Fix weapons attributes and lore</description>
 
-    <description>Fix weapons attributes (lore)</description>
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven.build.timestamp.format>yy-MM-dd</maven.build.timestamp.format>
+        <buildNumber>${maven.build.timestamp}</buildNumber>
     </properties>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}-1.20-${maven.build.timestamp}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -93,7 +97,6 @@
             <groupId>com.github.KeyKatyu</groupId>
             <artifactId>MCTranslationLib</artifactId>
             <version>v1.2.3</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

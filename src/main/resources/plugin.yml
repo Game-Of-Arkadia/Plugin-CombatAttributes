@@ -3,7 +3,7 @@ version: '${project.version}'
 main: fr.keykatyu.weaponsattributes.Main
 api-version: '1.20'
 authors: [KeyKatyu]
-description: Fix weapons attributes (lore)
+description: '${project.description}'
 commands:
   fix-attributes:
     description: Fix items attributes and update lore
