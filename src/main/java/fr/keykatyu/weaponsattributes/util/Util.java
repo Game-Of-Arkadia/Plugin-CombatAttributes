@@ -1,7 +1,6 @@
 package fr.keykatyu.weaponsattributes.util;
 
 import fr.keykatyu.weaponsattributes.Main;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
