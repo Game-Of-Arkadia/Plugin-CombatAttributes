@@ -4,12 +4,9 @@ import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.mctranslation.MCTranslator;
 import fr.keykatyu.weaponsattributes.Main;
 import fr.keykatyu.weaponsattributes.util.ItemBuilder;
-import fr.keykatyu.weaponsattributes.util.Util;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemSword;
-import net.minecraft.world.item.ItemTool;
 import net.minecraft.world.item.ItemToolMaterial;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
@@ -25,13 +22,13 @@ import java.util.*;
 
 public class Weapon {
 
-    private final ItemStack item;
+    private final ItemStack itemStack;
     private final ItemBuilder ib;
     private final Player owner;
     private final Language language;
 
     public Weapon(ItemStack item, Player owner) {
-        this.item = item;
+        this.itemStack = item;
         ib = new ItemBuilder(item);
         this.owner = owner;
         language = Language.fromPlayer(owner);
@@ -41,29 +38,26 @@ public class Weapon {
      * Update item stats in the lore
      */
     public ItemStack getUpdatedItem() {
-        if(!item.hasItemMeta()) return item;
+        if(!itemStack.hasItemMeta()) return itemStack;
         List<String> lore = new ArrayList<>();
-        if(item.getItemMeta().hasLore()) lore = item.getItemMeta().getLore();
+        if(itemStack.getItemMeta().hasLore()) lore = itemStack.getItemMeta().getLore();
 
-        Item itemTool = CraftItemStack.asNMSCopy(item).d();
-        if(item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Main.getInstance(), "WeaponsAttributesLore"), PersistentDataType.INTEGER)) {
-            int weaponsAttributesLines = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Main.getInstance(), "WeaponsAttributesLore"), PersistentDataType.INTEGER);
+        Item item = CraftItemStack.asNMSCopy(itemStack).d();
+        if(itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Main.getInstance(), "WeaponsAttributesLore"), PersistentDataType.INTEGER)) {
+            int weaponsAttributesLines = itemStack.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Main.getInstance(), "WeaponsAttributesLore"), PersistentDataType.INTEGER);
             if (weaponsAttributesLines > 0 && weaponsAttributesLines <= lore.size()) {
                 lore.subList(lore.size() - weaponsAttributesLines, lore.size()).clear();
             }
-        } else if(item.getItemMeta().hasAttributeModifiers() && itemTool instanceof ItemToolMaterial) {
-            double attackDamage = 0.0d;
-            double attackSpeed = 0.0d;
-            //TODO fix attack speed
-            if(itemTool instanceof ItemSword sword) {
-                attackDamage = sword.h();
-            } else if (itemTool instanceof ItemTool tool) {
-                attackDamage = tool.d();
-            }
+        } else if(itemStack.getItemMeta().hasAttributeModifiers() && item instanceof ItemToolMaterial) {
+            // Fix attack damage and attack speed
+            List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackDamageModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.f).stream().toList();
+            double attackDamageBonus = attackDamageModifiers.get(0).d();
+            List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackSpeedModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.h).stream().toList();
+            double attackSpeedBonus = 4 + attackSpeedModifiers.get(0).d() - 1;
             ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE,
-                    new AttributeModifier(UUID.randomUUID(), "fix_attackdamage", attackDamage, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                    new AttributeModifier(UUID.randomUUID(), "fix_attackdamage", attackDamageBonus, AttributeModifier.Operation.ADD_NUMBER));
             ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED,
-                    new AttributeModifier(UUID.randomUUID(), "fix_attackspeed", attackSpeed, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                    new AttributeModifier(UUID.randomUUID(), "fix_attackspeed", attackSpeedBonus, AttributeModifier.Operation.ADD_NUMBER));
         }
         List<String> weaponsAttributes = new ArrayList<>();
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(ib.toItemStack());
@@ -77,7 +71,7 @@ public class Weapon {
         attributes.remove(EquipmentSlot.HAND);
 
         for(Map.Entry<EquipmentSlot, List<Attribute>> map : attributes.entrySet()) {
-            String equipmentSlotKey = map.getKey().name().toString();
+            String equipmentSlotKey = map.getKey().name().toLowerCase().toString();
             if(map.getKey().equals(EquipmentSlot.OFF_HAND)) equipmentSlotKey = "offhand";
             weaponsAttributes.add("");
             weaponsAttributes.add("§7" + MCTranslator.translate("item.modifiers." + equipmentSlotKey, language));
@@ -96,9 +90,9 @@ public class Weapon {
      */
     private HashMap<EquipmentSlot, List<Attribute>> getAttributes() {
         HashMap<EquipmentSlot, List<Attribute>> attributes = new HashMap<>();
-        if(!item.hasItemMeta() || !item.getItemMeta().hasAttributeModifiers()) return attributes;
+        if(!itemStack.hasItemMeta() || !itemStack.getItemMeta().hasAttributeModifiers()) return attributes;
 
-        for(Map.Entry<org.bukkit.attribute.Attribute, AttributeModifier> attribute : item.getItemMeta().getAttributeModifiers().entries()) {
+        for(Map.Entry<org.bukkit.attribute.Attribute, AttributeModifier> attribute : itemStack.getItemMeta().getAttributeModifiers().entries()) {
             if(attribute.getValue().getName().equals("fix_attackdamage") ||
                 attribute.getValue().getName().equals("fix_attackspeed")) continue;
 
@@ -120,14 +114,13 @@ public class Weapon {
      * @param item The NMS ItemStack
      * @return The item attack damage
      */
-    private Number getAttackDamage(net.minecraft.world.item.ItemStack item) {
+    private long getAttackDamage(net.minecraft.world.item.ItemStack item) {
         double attackDamage = 1.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) attackDamage += modifier.d();
         attackDamage += net.minecraft.world.item.enchantment.EnchantmentManager.a(item, null);
         attackDamage *= ((CraftPlayer) owner).getHandle().A(0.5F);
         attackDamage = Math.round(attackDamage * 10.0) / 10.0;
-        if(Util.isInteger(attackDamage)) return (int) attackDamage;
-        return attackDamage;
+        return Math.round(attackDamage);
     }
 
     /**
@@ -135,12 +128,11 @@ public class Weapon {
      * @param item The NMS ItemStack
      * @return The item attack speed
      */
-    private Number getAttackSpeed(net.minecraft.world.item.ItemStack item) {
+    private long getAttackSpeed(net.minecraft.world.item.ItemStack item) {
         double attackSpeed = 1.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.h)) attackSpeed += modifier.d();
         attackSpeed = Math.round(attackSpeed * 10.0) / 10.0;
-        if(Util.isInteger(attackSpeed)) return (int) attackSpeed;
-        return attackSpeed;
+        return Math.round(attackSpeed);
     }
 
     public static class Attribute {
@@ -158,12 +150,12 @@ public class Weapon {
         public String renderDisplay() {
             if(value > 0) {
                 if (operation.equals(AttributeModifier.Operation.ADD_NUMBER)) {
-                    return "§9+" + value + " " + name;
+                    return "§9+" + Math.round(value) + " " + name;
                 }
                 return "§9+" + Math.round(value * 100) + "% " + name;
             } else {
                 if (operation.equals(AttributeModifier.Operation.ADD_NUMBER)) {
-                    return "§c-" + value + " " + name;
+                    return "§c-" + Math.round(value) + " " + name;
                 }
                 return "§c-" + Math.round(value * 100) + "% " + name;
             }
