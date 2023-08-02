@@ -7,12 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class WeaponsAttributesListener implements Listener {
@@ -33,17 +29,15 @@ public class WeaponsAttributesListener implements Listener {
      * @param e The event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onItemEnchantedAnvil(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
-
-        // Check if it's anvil inventory and if result isn't air
-        if(e.getClickedInventory() == null || !(e.getClickedInventory() instanceof AnvilInventory inventory)) return;
-        if(!e.getSlotType().equals(InventoryType.SlotType.RESULT) || inventory.getItem(2) == null) return;
+    public void onItemEnchantedAnvil(PrepareAnvilEvent e) {
+        Player player = (Player) e.getViewers().get(0);
+        AnvilInventory inventory = e.getInventory();
+        if(inventory.getItem(0) == null || inventory.getItem(1) == null) return;
 
         // Find book slot and item slot
         EnchantmentStorageMeta meta;
         int itemSlot;
-        if(inventory.getItem(0) != null && inventory.getItem(0).getItemMeta() != null
+        if(inventory.getItem(0).getItemMeta() != null
                 && inventory.getItem(0).getItemMeta() instanceof EnchantmentStorageMeta enchantMeta) {
             meta = enchantMeta;
             itemSlot = 1;
@@ -55,15 +49,18 @@ public class WeaponsAttributesListener implements Listener {
             return;
         }
         if(!meta.hasStoredEnchants()) return;
-        ItemBuilder ib = new ItemBuilder(inventory.getItem(itemSlot));
+
+        ItemBuilder ib = new ItemBuilder(inventory.getItem(itemSlot).clone());
         meta.getStoredEnchants().forEach(ib::addEnchant);
-        e.getInventory().setItem(2, new Weapon(ib.toItemStack(), player).getUpdatedItem());
+        e.setResult(new Weapon(ib.toItemStack(), player).getUpdatedItem());
     }
+
 
     /**
      * Update all items in the inventory with the new stats lore on a double click
      * @param e The event
      */
+    /*
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDoubleClickInventoryEvent(InventoryClickEvent e) {
         if(!(e.getClickedInventory() instanceof PlayerInventory inv)) return;
@@ -72,5 +69,6 @@ public class WeaponsAttributesListener implements Listener {
         for (int i = 0; i < items.length; i++) if(items[i] != null) items[i] = new Weapon(items[i], (Player) e.getWhoClicked()).getUpdatedItem();
         inv.setContents(items);
     }
+    */
 
 }
