@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class WeaponsAttributesListener implements Listener {
@@ -65,8 +66,9 @@ public class WeaponsAttributesListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExecutableItemGave(AddItemInPlayerInventoryEvent e) {
-        if(!Util.isCustomItem(e.getItem())) return;
-        Weapon weapon = new Weapon(e.getItem(), e.getPlayer());
+        ItemStack is = e.getItem().clone();
+        if(!Util.isCustomItem(e.getItem())) is = Util.setCustomItem(is);
+        Weapon weapon = new Weapon(is, e.getPlayer());
         e.getPlayer().getInventory().setItem(e.getSlot(), weapon.getUpdatedItem());
     }
 
