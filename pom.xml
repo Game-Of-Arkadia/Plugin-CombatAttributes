@@ -6,7 +6,7 @@
 
     <groupId>fr.keykatyu</groupId>
     <artifactId>WeaponsAttributes</artifactId>
-    <version>1.0.1-beta</version>
+    <version>1.0.2-beta</version>
     <packaging>jar</packaging>
 
     <name>WeaponsAttributes</name>
@@ -97,6 +97,13 @@
             <groupId>com.github.KeyKatyu</groupId>
             <artifactId>MCTranslationLib</artifactId>
             <version>v1.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.Ssomar-Developement</groupId>
+            <artifactId>SCore</artifactId>
+            <version>3.9.59</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

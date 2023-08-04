@@ -1,5 +1,6 @@
 package fr.keykatyu.weaponsattributes.listener;
 
+import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent;
 import fr.keykatyu.weaponsattributes.object.Weapon;
 import fr.keykatyu.weaponsattributes.util.ItemBuilder;
 import fr.keykatyu.weaponsattributes.util.Util;
@@ -58,20 +59,15 @@ public class WeaponsAttributesListener implements Listener {
         e.setResult(new Weapon(ib.toItemStack(), player).getUpdatedItem());
     }
 
-
     /**
-     * Update all items in the inventory with the new stats lore on a double click
+     * Called when a custom item from ExecutableItems plugin is given
      * @param e The event
      */
-    /*
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onDoubleClickInventoryEvent(InventoryClickEvent e) {
-        if(!(e.getClickedInventory() instanceof PlayerInventory inv)) return;
-        if(!e.getClick().equals(ClickType.DOUBLE_CLICK)) return;
-        ItemStack[] items = inv.getContents();
-        for (int i = 0; i < items.length; i++) if(items[i] != null) items[i] = new Weapon(items[i], (Player) e.getWhoClicked()).getUpdatedItem();
-        inv.setContents(items);
+    public void onExecutableItemGave(AddItemInPlayerInventoryEvent e) {
+        if(!Util.isCustomItem(e.getItem())) return;
+        Weapon weapon = new Weapon(e.getItem(), e.getPlayer());
+        e.getPlayer().getInventory().setItem(e.getSlot(), weapon.getUpdatedItem());
     }
-    */
 
 }

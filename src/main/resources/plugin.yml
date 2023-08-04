@@ -4,6 +4,9 @@ main: fr.keykatyu.weaponsattributes.Main
 api-version: '1.20'
 authors: [KeyKatyu]
 description: '${project.description}'
+depend:
+  - ExecutableItems
+  - SCore
 commands:
   fix-attributes:
     description: Fix items attributes and update lore
