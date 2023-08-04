@@ -1,6 +1,5 @@
 package fr.keykatyu.weaponsattributes.object;
 
-import com.ssomar.score.usedapi.TownyToolAPI;
 import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.mctranslation.MCTranslator;
 import fr.keykatyu.weaponsattributes.Main;

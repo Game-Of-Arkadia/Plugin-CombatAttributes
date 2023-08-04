@@ -1,10 +1,6 @@
 package fr.keykatyu.weaponsattributes.util;
 
 import fr.keykatyu.weaponsattributes.Main;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public class Util {
@@ -31,27 +27,8 @@ public class Util {
      * @return True if it's a custom item, false otherwise
      */
     public static boolean isCustomItem(ItemStack itemStack) {
-        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound nbtTagCompound = nmsItem.v();
-        if(nbtTagCompound == null) return false;
-        NBTTagList list = nbtTagCompound.c("Tags", 8);
-        if(list == null) return false;
-        return list.toString().contains("customItem");
-    }
-
-    /**
-     * Add the tag to the item to make it a custom item
-     * @param is The item
-     */
-    public static ItemStack setCustomItem(ItemStack is) {
-        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(is);
-        NBTTagCompound nbtTagCompound = nmsItem.v();
-        if(nbtTagCompound == null) nbtTagCompound = new NBTTagCompound();
-        NBTTagList list = nbtTagCompound.c("Tags", 8);
-        list.b(list.size(), NBTTagString.a("customItem"));
-        nbtTagCompound.a("Tags", list);
-        nmsItem.c(nbtTagCompound);
-        return CraftItemStack.asBukkitCopy(nmsItem);
+        if(!itemStack.hasItemMeta()) return false;
+        return itemStack.getItemMeta().hasAttributeModifiers();
     }
 
 }
