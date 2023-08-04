@@ -1,5 +1,6 @@
 package fr.keykatyu.weaponsattributes.object;
 
+import com.ssomar.score.usedapi.TownyToolAPI;
 import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.mctranslation.MCTranslator;
 import fr.keykatyu.weaponsattributes.Main;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 public class Weapon {
@@ -27,7 +29,7 @@ public class Weapon {
     private final ItemBuilder ib;
     private final Player owner;
     private final Language language;
-    private static final DecimalFormat df = new DecimalFormat("0.#");
+    private static final DecimalFormat df = new DecimalFormat("0.#", DecimalFormatSymbols.getInstance());
 
     public Weapon(ItemStack item, Player owner) {
         this.itemStack = item;
