@@ -6,15 +6,13 @@
 - a player run the **/fix-attributes** command with the item in the hand.
 - an **enchantment book** is applied in an **anvil**.
 - an **enchantment** is applied in an **enchantment table**.*
-- the item is given by **a moderator who used /ei give** command.
+- the item is given by **a moderator who used /ei give** command
+*(if the activator EI_ENTER_IN_THE_PLAYER_INVENTORY is activated)*
 
 ### Does this apply to all items ?
 
-> **NO. It only works for custom items, but (see below)**  
-
-⚠️ **YOU MUST :**
-- **make sure** that your item has attribute modifiers (example : +2 speed)
-- **hide** the default attributes **by setting flag "Hide Attributes"**
+> **NO. It only works for custom items.**  
+> ⚠️ A custom item is an item which **has attribute modifiers** (for example +2 speed)
 
 > If this condition is met, the item will be updated 
 > during previously announced events.   
