@@ -22,7 +22,7 @@ public class WeaponsAttributesListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemEnchantedTable(EnchantItemEvent e) {
-        if(Util.isCustomItem(e.getItem())) return;
+        if(!Util.isCustomItem(e.getItem())) return;
         ItemBuilder ib = new ItemBuilder(e.getItem());
         e.getEnchantsToAdd().forEach(ib::addEnchant);
         e.getInventory().setItem(0, new Weapon(ib.toItemStack(), e.getEnchanter()).getUpdatedItem());
@@ -52,7 +52,7 @@ public class WeaponsAttributesListener implements Listener {
         } else {
             return;
         }
-        if(Util.isCustomItem(inventory.getItem(itemSlot))) return;
+        if(!Util.isCustomItem(inventory.getItem(itemSlot))) return;
         if(!meta.hasStoredEnchants()) return;
 
         ItemBuilder ib = new ItemBuilder(inventory.getItem(itemSlot).clone());
