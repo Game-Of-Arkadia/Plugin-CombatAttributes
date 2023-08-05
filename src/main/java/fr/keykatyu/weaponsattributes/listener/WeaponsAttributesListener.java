@@ -1,18 +1,25 @@
 package fr.keykatyu.weaponsattributes.listener;
 
 import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent;
+import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.weaponsattributes.object.Weapon;
 import fr.keykatyu.weaponsattributes.util.ItemBuilder;
 import fr.keykatyu.weaponsattributes.util.Util;
+import net.minecraft.world.item.Items;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class WeaponsAttributesListener implements Listener {
 
@@ -70,6 +77,22 @@ public class WeaponsAttributesListener implements Listener {
         if(!Util.isCustomItem(is)) return;
         Weapon weapon = new Weapon(is, e.getPlayer());
         e.getPlayer().getInventory().setItem(e.getSlot(), weapon.getUpdatedItem());
+    }
+
+    /**
+     * Auto-update custom items when the player changes its Locale
+     * @param e The event
+     */
+    @EventHandler
+    public void onPlayerLocalChanged(PlayerLocaleChangeEvent e) {
+        ItemStack[] items = e.getPlayer().getInventory().getContents();
+        for (int i = 0; i < items.length; i++) {
+            ItemStack is = items[i];
+            if(is != null && is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers()) {
+                items[i] = new Weapon(items[i], e.getPlayer(), Language.fromLocale(e.getLocale())).getUpdatedItem();
+            }
+        }
+        e.getPlayer().getInventory().setContents(items);
     }
 
 }

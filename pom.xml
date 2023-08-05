@@ -6,7 +6,7 @@
 
     <groupId>fr.keykatyu</groupId>
     <artifactId>WeaponsAttributes</artifactId>
-    <version>1.0.3-beta</version>
+    <version>1.0.4-beta</version>
     <packaging>jar</packaging>
 
     <name>WeaponsAttributes</name>

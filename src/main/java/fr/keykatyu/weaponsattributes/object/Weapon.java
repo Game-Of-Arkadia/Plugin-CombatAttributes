@@ -28,13 +28,20 @@ public class Weapon {
     private final ItemBuilder ib;
     private final Player owner;
     private final Language language;
-    private static final DecimalFormat df = new DecimalFormat("0.#", DecimalFormatSymbols.getInstance());
+    private static final DecimalFormat df = new DecimalFormat("0.#", DecimalFormatSymbols.getInstance(Locale.US));
 
     public Weapon(ItemStack item, Player owner) {
         this.itemStack = item;
         ib = new ItemBuilder(item);
         this.owner = owner;
         language = Language.fromPlayer(owner);
+    }
+
+    public Weapon(ItemStack item, Player owner, Language language) {
+        this.itemStack = item;
+        ib = new ItemBuilder(item);
+        this.owner = owner;
+        this.language = language;
     }
 
     /**
@@ -99,7 +106,7 @@ public class Weapon {
             if(attribute.getValue().getName().equals("fix_attackdamage") ||
                 attribute.getValue().getName().equals("fix_attackspeed")) continue;
 
-            String name = MCTranslator.translate("attribute.name." + attribute.getKey().getKey().getKey(), Language.fromPlayer(owner));
+            String name = MCTranslator.translate("attribute.name." + attribute.getKey().getKey().getKey(), language);
             double value = attribute.getValue().getAmount();
             AttributeModifier.Operation operation = attribute.getValue().getOperation();
 
