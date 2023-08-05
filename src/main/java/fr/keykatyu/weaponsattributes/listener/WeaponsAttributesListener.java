@@ -5,7 +5,6 @@ import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.weaponsattributes.object.Weapon;
 import fr.keykatyu.weaponsattributes.util.ItemBuilder;
 import fr.keykatyu.weaponsattributes.util.Util;
-import net.minecraft.world.item.Items;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,10 +15,6 @@ import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class WeaponsAttributesListener implements Listener {
 
