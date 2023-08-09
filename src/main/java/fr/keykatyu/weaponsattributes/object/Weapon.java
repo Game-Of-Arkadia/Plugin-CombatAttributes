@@ -28,7 +28,7 @@ public class Weapon {
     private final ItemBuilder ib;
     private final Player owner;
     private final Language language;
-    private static final DecimalFormat df = new DecimalFormat("0.#", DecimalFormatSymbols.getInstance(Locale.US));
+    private static final DecimalFormat df = new DecimalFormat("0.##", DecimalFormatSymbols.getInstance(Locale.US));
 
     public Weapon(ItemStack item, Player owner) {
         this.itemStack = item;

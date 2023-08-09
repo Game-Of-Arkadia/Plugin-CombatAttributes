@@ -6,7 +6,7 @@
 - a player run the **/fix-attributes** command with the item in the hand.
 - an **enchantment book** is applied in an **anvil**.
 - an **enchantment** is applied in an **enchantment table**.*
-- the item is given by **a moderator who used /ei give** command
+- the item is given by **a moderator who used /ei give** command or the **EI Editor menu** 
 *(if the activator EI_ENTER_IN_THE_PLAYER_INVENTORY is activated)*
 
 ### Does this apply to all items ?
