@@ -1,7 +1,7 @@
-package fr.keykatyu.weaponsattributes.command;
+package fr.keykatyu.combatattributes.command;
 
-import fr.keykatyu.weaponsattributes.object.Weapon;
-import fr.keykatyu.weaponsattributes.util.Util;
+import fr.keykatyu.combatattributes.object.Weapon;
+import fr.keykatyu.combatattributes.util.Util;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.TextComponent;

@@ -1,8 +1,8 @@
-package fr.keykatyu.weaponsattributes;
+package fr.keykatyu.combatattributes;
 
-import fr.keykatyu.weaponsattributes.command.FixAttributesCommand;
-import fr.keykatyu.weaponsattributes.listener.WeaponsAttributesListener;
-import fr.keykatyu.weaponsattributes.util.Util;
+import fr.keykatyu.combatattributes.command.FixAttributesCommand;
+import fr.keykatyu.combatattributes.listener.CombatAttributesListener;
+import fr.keykatyu.combatattributes.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,7 +22,7 @@ public final class Main extends JavaPlugin {
         }
 
         getCommand("fix-attributes").setExecutor(new FixAttributesCommand());
-        getServer().getPluginManager().registerEvents(new WeaponsAttributesListener(), this);
+        getServer().getPluginManager().registerEvents(new CombatAttributesListener(), this);
     }
 
     private boolean setupExecutableItems() {

@@ -1,6 +1,6 @@
-package fr.keykatyu.weaponsattributes.util;
+package fr.keykatyu.combatattributes.util;
 
-import fr.keykatyu.weaponsattributes.Main;
+import fr.keykatyu.combatattributes.Main;
 import org.bukkit.inventory.ItemStack;
 
 public class Util {
@@ -10,7 +10,7 @@ public class Util {
      * @return The prefix
      */
     public static String prefix() {
-        return "§7[§f§lWeaponsAttributes§7] ";
+        return null;
     }
 
     /**

@@ -1,10 +1,10 @@
-package fr.keykatyu.weaponsattributes.listener;
+package fr.keykatyu.combatattributes.listener;
 
 import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent;
 import fr.keykatyu.mctranslation.Language;
-import fr.keykatyu.weaponsattributes.object.Weapon;
-import fr.keykatyu.weaponsattributes.util.ItemBuilder;
-import fr.keykatyu.weaponsattributes.util.Util;
+import fr.keykatyu.combatattributes.object.Weapon;
+import fr.keykatyu.combatattributes.util.ItemBuilder;
+import fr.keykatyu.combatattributes.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
-public class WeaponsAttributesListener implements Listener {
+public class CombatAttributesListener implements Listener {
 
     /**
      * Update enchanted item in the enchantment table with the new stats lore

@@ -1,13 +1,13 @@
-package fr.keykatyu.weaponsattributes.object;
+package fr.keykatyu.combatattributes.object;
 
 import fr.keykatyu.mctranslation.Language;
 import fr.keykatyu.mctranslation.MCTranslator;
-import fr.keykatyu.weaponsattributes.Main;
-import fr.keykatyu.weaponsattributes.util.ItemBuilder;
+import fr.keykatyu.combatattributes.Main;
+import fr.keykatyu.combatattributes.util.ItemBuilder;
+import fr.keykatyu.combatattributes.util.Util;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemToolMaterial;
+import net.minecraft.world.item.*;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
@@ -58,16 +58,32 @@ public class Weapon {
             if (weaponsAttributesLines > 0 && weaponsAttributesLines <= lore.size()) {
                 lore.subList(lore.size() - weaponsAttributesLines, lore.size()).clear();
             }
-        } else if(itemStack.getItemMeta().hasAttributeModifiers() && item instanceof ItemToolMaterial) {
+        } else if(itemStack.getItemMeta().hasAttributeModifiers()) {
             // Fix attack damage and attack speed
-            List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackDamageModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.f).stream().toList();
-            double attackDamageBonus = attackDamageModifiers.get(0).d();
-            List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackSpeedModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.h).stream().toList();
-            double attackSpeedBonus = 4 + attackSpeedModifiers.get(0).d() - 1;
-            ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE,
-                    new AttributeModifier(UUID.randomUUID(), "fix_attackdamage", attackDamageBonus, AttributeModifier.Operation.ADD_NUMBER));
-            ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED,
-                    new AttributeModifier(UUID.randomUUID(), "fix_attackspeed", attackSpeedBonus, AttributeModifier.Operation.ADD_NUMBER));
+            if(item instanceof ItemToolMaterial) {
+                Util.console("a");
+                List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackDamageModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.f).stream().toList();
+                double attackDamageBonus = attackDamageModifiers.get(0).d();
+                List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackSpeedModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.h).stream().toList();
+                double attackSpeedBonus = 4 + attackSpeedModifiers.get(0).d() - 1;
+                ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE,
+                        new AttributeModifier(UUID.randomUUID(), "fix_attackdamage", attackDamageBonus, AttributeModifier.Operation.ADD_NUMBER));
+                ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED,
+                        new AttributeModifier(UUID.randomUUID(), "fix_attackspeed", attackSpeedBonus, AttributeModifier.Operation.ADD_NUMBER));
+            }
+            // Fix armor and armor toughness
+            if(item instanceof ItemArmor itemArmor) {
+                Util.console("b");
+                List<net.minecraft.world.entity.ai.attributes.AttributeModifier> armorModifiers = item.a(itemArmor.g()).get(GenericAttributes.i).stream().toList();
+                double armorBonus = armorModifiers.get(0).d();
+                List<net.minecraft.world.entity.ai.attributes.AttributeModifier> armorToughnessModifiers = item.a(itemArmor.g()).get(GenericAttributes.j).stream().toList();
+                double armorToughnessBonus = armorToughnessModifiers.get(0).d();
+                ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
+                        new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER));
+                ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS,
+                        new AttributeModifier(UUID.randomUUID(), "fix_armortoughness", armorToughnessBonus, AttributeModifier.Operation.ADD_NUMBER));
+            }
+            // Fix Trident
         }
         List<String> weaponsAttributes = new ArrayList<>();
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(ib.toItemStack());

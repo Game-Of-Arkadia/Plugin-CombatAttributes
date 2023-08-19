@@ -1,4 +1,4 @@
-package fr.keykatyu.weaponsattributes.util;
+package fr.keykatyu.combatattributes.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

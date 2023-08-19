@@ -1,6 +1,6 @@
-name: WeaponsAttributes
+name: CombatAttributes
 version: '${project.version}'
-main: fr.keykatyu.weaponsattributes.Main
+main: fr.keykatyu.combatattributes.Main
 api-version: '1.20'
 authors: [KeyKatyu]
 description: '${project.description}'
