@@ -15,6 +15,10 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
+        saveDefaultConfig();
+        reloadConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
 
         if(!setupExecutableItems()) {
             Util.console("§cPlugin disabled due to not ExecutableItems dependency found !");
