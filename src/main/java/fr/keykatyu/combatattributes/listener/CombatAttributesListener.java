@@ -1,10 +1,10 @@
 package fr.keykatyu.combatattributes.listener;
 
 import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent;
-import fr.keykatyu.mctranslation.Language;
-import fr.keykatyu.combatattributes.object.Weapon;
+import fr.keykatyu.combatattributes.object.CombatItem;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
 import fr.keykatyu.combatattributes.util.Util;
+import fr.keykatyu.mctranslation.Language;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,9 +25,10 @@ public class CombatAttributesListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemEnchantedTable(EnchantItemEvent e) {
         if(!Util.isCustomItem(e.getItem())) return;
+        if(Util.isBlackListed(e.getItem())) return;
         ItemBuilder ib = new ItemBuilder(e.getItem());
         e.getEnchantsToAdd().forEach(ib::addEnchant);
-        e.getInventory().setItem(0, new Weapon(ib.toItemStack(), e.getEnchanter()).getUpdatedItem());
+        e.getInventory().setItem(0, new CombatItem(ib.toItemStack(), e.getEnchanter()).getUpdatedItem());
     }
 
     /**
@@ -54,12 +55,14 @@ public class CombatAttributesListener implements Listener {
         } else {
             return;
         }
-        if(!Util.isCustomItem(inventory.getItem(itemSlot))) return;
+        ItemStack item = inventory.getItem(itemSlot);
+        if(!Util.isCustomItem(item)) return;
+        if(Util.isBlackListed(item)) return;
         if(!meta.hasStoredEnchants()) return;
 
-        ItemBuilder ib = new ItemBuilder(inventory.getItem(itemSlot).clone());
+        ItemBuilder ib = new ItemBuilder(item.clone());
         meta.getStoredEnchants().forEach(ib::addEnchant);
-        e.setResult(new Weapon(ib.toItemStack(), player).getUpdatedItem());
+        e.setResult(new CombatItem(ib.toItemStack(), player).getUpdatedItem());
     }
 
     /**
@@ -70,8 +73,9 @@ public class CombatAttributesListener implements Listener {
     public void onExecutableItemGave(AddItemInPlayerInventoryEvent e) {
         ItemStack is = e.getItem().clone();
         if(!Util.isCustomItem(is)) return;
-        Weapon weapon = new Weapon(is, e.getPlayer());
-        e.getPlayer().getInventory().setItem(e.getSlot(), weapon.getUpdatedItem());
+        if(Util.isBlackListed(e.getItem())) return;
+        CombatItem combatItem = new CombatItem(is, e.getPlayer());
+        e.getPlayer().getInventory().setItem(e.getSlot(), combatItem.getUpdatedItem());
     }
 
     /**
@@ -84,7 +88,7 @@ public class CombatAttributesListener implements Listener {
         for (int i = 0; i < items.length; i++) {
             ItemStack is = items[i];
             if(is != null && is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers()) {
-                items[i] = new Weapon(items[i], e.getPlayer(), Language.fromLocale(e.getLocale())).getUpdatedItem();
+                items[i] = new CombatItem(items[i], e.getPlayer(), Language.fromLocale(e.getLocale())).getUpdatedItem();
             }
         }
         e.getPlayer().getInventory().setContents(items);

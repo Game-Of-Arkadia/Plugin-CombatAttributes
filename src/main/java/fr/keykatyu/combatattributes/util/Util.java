@@ -10,7 +10,7 @@ public class Util {
      * @return The prefix
      */
     public static String prefix() {
-        return null;
+        return Config.getString("messages.prefix") + " ";
     }
 
     /**
@@ -29,6 +29,16 @@ public class Util {
     public static boolean isCustomItem(ItemStack itemStack) {
         if(!itemStack.hasItemMeta()) return false;
         return itemStack.getItemMeta().hasAttributeModifiers();
+    }
+
+    /**
+     * Get if the itemStack is blacklisted from the plugin
+     * (items to NOT update)
+     * @param itemStack The itemStack
+     * @return True or false
+     */
+    public static boolean isBlackListed(ItemStack itemStack) {
+        return Config.getMaterialList("blacklist").contains(itemStack.getType());
     }
 
 }

@@ -1,8 +1,9 @@
-# Plugin WeaponsAttributes - MC 1.20.1
+# Plugin CombatAttributes - MC 1.20.1
 
-Fix weapons attributes :
+Fix combat item attributes :
 - fix lore
 - fix attack damage and attack speed on weapons with attributes
+- fix armor, armor toughness and knockback resistance on armor pieces with attributes
 
 ## Commands
 

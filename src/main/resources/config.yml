@@ -1,2 +1,13 @@
 messages:
-  prefix: "§7[§f§lWeaponsAttributes§7]"
+  prefix: "&7[&f&lCombatAttributes&7]"
+  must-be-player: "&cVous devez être un joueur pour exécuter cette commande."
+  not-custom-item: "&cCet item n'est pas un item custom."
+  item-updated: " &aVotre item a bien été mis à jour. Vous pouvez passer votre souris sur ce message pour visualiser l'ancien item."
+  bruteforce-update: " &eVous venez de forcer la mise à jour d'un item dont le matériau est blacklisté du plugin."
+
+# Plugin blacklist
+# A blacklisted item can be force updated with the /fix-attributes command, but
+# it will not be updated automatically when the different events are called.
+# Write the item material in capital letters, like "DIAMOND_HELMET" for example.
+blacklist:
+  - ""
