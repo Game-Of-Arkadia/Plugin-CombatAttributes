@@ -29,7 +29,7 @@ public class CombatCalculator {
      * @return The item attack speed
      */
     public static double getAttackSpeed(net.minecraft.world.item.ItemStack item) {
-        double attackSpeed = 1.0;
+        double attackSpeed = 4.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.h)) attackSpeed += modifier.d();
         attackSpeed = Math.round(attackSpeed * 10.0) / 10.0;
         return attackSpeed;
