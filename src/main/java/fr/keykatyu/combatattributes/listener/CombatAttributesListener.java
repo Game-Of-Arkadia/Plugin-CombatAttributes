@@ -87,7 +87,7 @@ public class CombatAttributesListener implements Listener {
         ItemStack[] items = e.getPlayer().getInventory().getContents();
         for (int i = 0; i < items.length; i++) {
             ItemStack is = items[i];
-            if(is != null && is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers()) {
+            if(is != null && is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers() && !Util.isBlackListed(is)) {
                 items[i] = new CombatItem(items[i], e.getPlayer(), Language.fromLocale(e.getLocale())).getUpdatedItem();
             }
         }

@@ -63,11 +63,8 @@ public class CombatItem {
             Item item = CraftItemStack.asNMSCopy(itemStack).d();
             switch (type) {
                 case WEAPON -> {
-                    List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackDamageModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.f).stream().toList();
-                    double attackDamageBonus = attackDamageModifiers.get(0).d();
-                    List<net.minecraft.world.entity.ai.attributes.AttributeModifier> attackSpeedModifiers = item.a(EnumItemSlot.a).get(GenericAttributes.h).stream().toList();
-                    double attackSpeedBonus = attackSpeedModifiers.get(0).d();
-
+                    double attackDamageBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.f);
+                    double attackSpeedBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.h);
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE,
                             new AttributeModifier(UUID.randomUUID(), "fix_attackdamage", attackDamageBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED,
@@ -75,20 +72,15 @@ public class CombatItem {
                 }
                 case ARMOR_PIECE -> {
                     ItemArmor itemArmor = (ItemArmor) item;
-                    List<net.minecraft.world.entity.ai.attributes.AttributeModifier> armorModifiers = itemArmor.a(itemArmor.g()).get(GenericAttributes.i).stream().toList();
-                    double armorBonus = armorModifiers.get(0).d();
-                    List<net.minecraft.world.entity.ai.attributes.AttributeModifier> armorToughnessModifiers = itemArmor.a(itemArmor.g()).get(GenericAttributes.j).stream().toList();
-                    double armorToughnessBonus = armorToughnessModifiers.get(0).d();
-
+                    double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
+                    double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
                             new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS,
                             new AttributeModifier(UUID.randomUUID(), "fix_armortoughness", armorToughnessBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
 
                     if(itemArmor.d() == EnumArmorMaterial.g) {
-                        List<net.minecraft.world.entity.ai.attributes.AttributeModifier> knockbackResistanceModifiers = itemArmor.a(itemArmor.g()).get(GenericAttributes.c).stream().toList();
-                        double knockbackResistance = knockbackResistanceModifiers.get(0).d();
-
+                        double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
                         ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE,
                                 new AttributeModifier(UUID.randomUUID(), "fix_knockbackresistance", knockbackResistance, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                     }
