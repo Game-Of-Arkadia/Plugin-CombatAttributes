@@ -108,9 +108,11 @@ public class CombatItem {
                     case a -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.head", language));
                 }
                 combatAttributes.add("§9+" + df.format(CombatCalculator.getArmor(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor", language));
-                combatAttributes.add("§9+" + df.format(CombatCalculator.getArmorToughness(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor_toughness", language));
-                if(itemArmor.d() == EnumArmorMaterial.g) {
-                    combatAttributes.add("§9+" + df.format(CombatCalculator.getKnockbackResistance(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.knockback_resistance", language));
+                if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
+                    combatAttributes.add("§9+" + df.format(CombatCalculator.getArmorToughness(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor_toughness", language));
+                    if(itemArmor.d() == EnumArmorMaterial.g) {
+                        combatAttributes.add("§9+" + df.format(CombatCalculator.getKnockbackResistance(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.knockback_resistance", language));
+                    }
                 }
             }
         }
