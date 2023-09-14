@@ -72,17 +72,19 @@ public class CombatItem {
                 }
                 case ARMOR_PIECE -> {
                     ItemArmor itemArmor = (ItemArmor) item;
-                    double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
-                    double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
-                    ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
-                            new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
-                    ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS,
-                            new AttributeModifier(UUID.randomUUID(), "fix_armortoughness", armorToughnessBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
+                    if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
+                        double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
+                        double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
+                        ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
+                                new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
+                        ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS,
+                                new AttributeModifier(UUID.randomUUID(), "fix_armortoughness", armorToughnessBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
 
-                    if(itemArmor.d() == EnumArmorMaterial.g) {
-                        double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
-                        ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                new AttributeModifier(UUID.randomUUID(), "fix_knockbackresistance", knockbackResistance, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
+                        if(itemArmor.d() == EnumArmorMaterial.g) {
+                            double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
+                            ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+                                    new AttributeModifier(UUID.randomUUID(), "fix_knockbackresistance", knockbackResistance, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
+                        }
                     }
                 }
             }
