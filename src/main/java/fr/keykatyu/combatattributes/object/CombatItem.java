@@ -72,14 +72,14 @@ public class CombatItem {
                 }
                 case ARMOR_PIECE -> {
                     ItemArmor itemArmor = (ItemArmor) item;
+                    double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
+                    ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
+                            new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
+
                     if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
-                        double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
                         double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
-                        ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
-                                new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                         ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS,
                                 new AttributeModifier(UUID.randomUUID(), "fix_armortoughness", armorToughnessBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
-
                         if(itemArmor.d() == EnumArmorMaterial.g) {
                             double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
                             ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE,
@@ -108,12 +108,10 @@ public class CombatItem {
                     case a -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.head", language));
                 }
                 combatAttributes.add("§9+" + df.format(CombatCalculator.getArmor(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor", language));
-                if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
-                    combatAttributes.add("§9+" + df.format(CombatCalculator.getArmorToughness(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor_toughness", language));
-                    if(itemArmor.d() == EnumArmorMaterial.g) {
-                        combatAttributes.add("§9+" + df.format(CombatCalculator.getKnockbackResistance(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.knockback_resistance", language));
-                    }
-                }
+                double armorToughness = CombatCalculator.getArmorToughness(nmsItem);
+                double knockbackResistance = CombatCalculator.getKnockbackResistance(nmsItem);
+                if(armorToughness != 0) combatAttributes.add("§9+" + df.format(CombatCalculator.getArmorToughness(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor_toughness", language));
+                if(knockbackResistance != 0) combatAttributes.add("§9+" + df.format(CombatCalculator.getKnockbackResistance(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.knockback_resistance", language));
             }
         }
 
