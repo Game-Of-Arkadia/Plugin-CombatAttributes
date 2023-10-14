@@ -4,7 +4,7 @@ import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent
 import fr.keykatyu.combatattributes.object.CombatItem;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
 import fr.keykatyu.combatattributes.util.Util;
-import fr.keykatyu.mctranslation.Language;
+import fr.keykatyu.mctranslation.api.Language;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

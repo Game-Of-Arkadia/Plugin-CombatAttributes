@@ -2,14 +2,14 @@ package fr.keykatyu.combatattributes.object;
 
 import fr.keykatyu.combatattributes.Main;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
-import fr.keykatyu.mctranslation.Language;
-import fr.keykatyu.mctranslation.MCTranslator;
+import fr.keykatyu.mctranslation.api.Language;
+import fr.keykatyu.mctranslation.api.MCTranslator;
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.item.*;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;

@@ -6,7 +6,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemArmor;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -35,7 +34,6 @@ public class CombatCalculator {
         double attackDamage = 1.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) attackDamage += modifier.d();
         attackDamage += net.minecraft.world.item.enchantment.EnchantmentManager.a(item, null);
-        attackDamage *= ((CraftPlayer) owner).getHandle().A(0.5F);
         attackDamage = Math.round(attackDamage * 10.0) / 10.0;
         return attackDamage;
     }

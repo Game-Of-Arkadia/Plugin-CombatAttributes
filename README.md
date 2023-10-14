@@ -1,4 +1,4 @@
-# Plugin CombatAttributes - MC 1.20.1
+# Plugin CombatAttributes - MC 1.20.2
 
 Fix combat item attributes :
 - fix lore
