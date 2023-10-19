@@ -37,6 +37,7 @@ public class CombatAttributesListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemEnchantedAnvil(PrepareAnvilEvent e) {
+        if(e.getViewers().isEmpty()) return;
         Player player = (Player) e.getViewers().get(0);
         AnvilInventory inventory = e.getInventory();
         if(inventory.getItem(0) == null || inventory.getItem(1) == null) return;
