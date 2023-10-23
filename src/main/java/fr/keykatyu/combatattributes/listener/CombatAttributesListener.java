@@ -62,7 +62,7 @@ public class CombatAttributesListener implements Listener {
         if(!meta.hasStoredEnchants()) return;
 
         ItemBuilder ib = new ItemBuilder(item.clone());
-        meta.getStoredEnchants().forEach(ib::addEnchant);
+        meta.getStoredEnchants().forEach(ib::addUnsafeEnchant);
         e.setResult(new CombatItem(ib.toItemStack(), player).getUpdatedItem());
     }
 
