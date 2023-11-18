@@ -6,7 +6,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.GenericAttributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemArmor;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -27,10 +26,9 @@ public class CombatCalculator {
     /**
      * Calculate item attack damage with NMS
      * @param item The NMS ItemStack
-     * @param owner The item owner
      * @return The item attack damage
      */
-    public static double getAttackDamage(net.minecraft.world.item.ItemStack item, Player owner) {
+    public static double getAttackDamage(net.minecraft.world.item.ItemStack item) {
         double attackDamage = 1.0;
         for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) attackDamage += modifier.d();
         attackDamage += net.minecraft.world.item.enchantment.EnchantmentManager.a(item, null);
@@ -84,9 +82,12 @@ public class CombatCalculator {
     public static double getKnockbackResistance(net.minecraft.world.item.ItemStack item) {
         double knockbackResistance = 0.0;
         ItemArmor itemArmor = ((ItemArmor) item.d());
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(itemArmor.g()).get(GenericAttributes.c)) knockbackResistance += modifier.d();
-        knockbackResistance = Math.round(knockbackResistance * 10.0) / 10.0;
-        return knockbackResistance * 10.0;
+
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(itemArmor.g()).get(GenericAttributes.c)) {
+            knockbackResistance += modifier.d();
+        }
+        knockbackResistance = Math.round(knockbackResistance * 10.0);
+        return knockbackResistance;
     }
 
 }

@@ -41,4 +41,8 @@ public class Util {
         return Config.getMaterialList("blacklist").contains(itemStack.getType());
     }
 
+    public static boolean hasNetheriteKBResistanceToBeRemoved() {
+        return Config.getBoolean("config.remove-netherite-kb-resistance");
+    }
+
 }

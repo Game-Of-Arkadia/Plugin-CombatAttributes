@@ -1,20 +1,32 @@
 package fr.keykatyu.combatattributes.listener;
 
 import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent;
+import fr.keykatyu.combatattributes.object.CombatCalculator;
 import fr.keykatyu.combatattributes.object.CombatItem;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
 import fr.keykatyu.combatattributes.util.Util;
 import fr.keykatyu.mctranslation.api.Language;
+import net.minecraft.world.entity.ai.attributes.GenericAttributes;
+import net.minecraft.world.item.EnumArmorMaterial;
+import net.minecraft.world.item.ItemArmor;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.UUID;
 
 public class CombatAttributesListener implements Listener {
 
@@ -24,9 +36,13 @@ public class CombatAttributesListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemEnchantedTable(EnchantItemEvent e) {
-        if(!Util.isCustomItem(e.getItem())) return;
-        if(Util.isBlackListed(e.getItem())) return;
-        ItemBuilder ib = new ItemBuilder(e.getItem());
+        ItemStack is = e.getItem();
+        if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+            removeNetheriteKbResistance(is, e.getInventory(), 0);
+        }
+        if(!Util.isCustomItem(is)) return;
+        if(Util.isBlackListed(is)) return;
+        ItemBuilder ib = new ItemBuilder(is);
         e.getEnchantsToAdd().forEach(ib::addEnchant);
         e.getInventory().setItem(0, new CombatItem(ib.toItemStack(), e.getEnchanter()).getUpdatedItem());
     }
@@ -56,12 +72,15 @@ public class CombatAttributesListener implements Listener {
         } else {
             return;
         }
-        ItemStack item = inventory.getItem(itemSlot);
-        if(!Util.isCustomItem(item)) return;
-        if(Util.isBlackListed(item)) return;
+        ItemStack is = inventory.getItem(itemSlot).clone();
+        if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+            removeNetheriteKbResistance(is, e.getInventory(), 2);
+        }
+        if(!Util.isCustomItem(is)) return;
+        if(Util.isBlackListed(is)) return;
         if(!meta.hasStoredEnchants()) return;
 
-        ItemBuilder ib = new ItemBuilder(item.clone());
+        ItemBuilder ib = new ItemBuilder(is.clone());
         meta.getStoredEnchants().forEach(ib::addUnsafeEnchant);
         e.setResult(new CombatItem(ib.toItemStack(), player).getUpdatedItem());
     }
@@ -73,10 +92,14 @@ public class CombatAttributesListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExecutableItemGave(AddItemInPlayerInventoryEvent e) {
         ItemStack is = e.getItem().clone();
+        Player player = e.getPlayer();
+        if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+            removeNetheriteKbResistance(is, player.getInventory(), e.getSlot());
+        }
         if(!Util.isCustomItem(is)) return;
         if(Util.isBlackListed(e.getItem())) return;
-        CombatItem combatItem = new CombatItem(is, e.getPlayer());
-        e.getPlayer().getInventory().setItem(e.getSlot(), combatItem.getUpdatedItem());
+        CombatItem combatItem = new CombatItem(is, player);
+        player.getInventory().setItem(e.getSlot(), combatItem.getUpdatedItem());
     }
 
     /**
@@ -85,14 +108,68 @@ public class CombatAttributesListener implements Listener {
      */
     @EventHandler
     public void onPlayerLocalChanged(PlayerLocaleChangeEvent e) {
-        ItemStack[] items = e.getPlayer().getInventory().getContents();
+        Player player = e.getPlayer();
+        ItemStack[] items = player.getInventory().getContents();
         for (int i = 0; i < items.length; i++) {
-            ItemStack is = items[i];
-            if(is != null && is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers() && !Util.isBlackListed(is)) {
-                items[i] = new CombatItem(items[i], e.getPlayer(), Language.fromLocale(e.getLocale())).getUpdatedItem();
+            if(items[i] == null) continue;
+            ItemStack is = items[i].clone();
+            if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+                removeNetheriteKbResistance(is, player.getInventory(), i);
+            }
+            if(is.getItemMeta().hasAttributeModifiers() && !Util.isBlackListed(is)) {
+                items[i] = new CombatItem(is, player, Language.fromLocale(e.getLocale())).getUpdatedItem();
             }
         }
-        e.getPlayer().getInventory().setContents(items);
+        player.getInventory().setContents(items);
+    }
+
+    /**
+     * Automatically update item when moderator pick it
+     * from creative inventory
+     * @param e The event
+     */
+    @EventHandler
+    public void onCreativeInventoryItemPickedEvent(InventoryCreativeEvent e) {
+        if(!e.getAction().name().startsWith("PLACE")) return;
+        ItemStack is = e.getCursor();
+        Player player = (Player) e.getWhoClicked();
+        if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+            removeNetheriteKbResistance(is, player.getInventory(), e.getSlot());
+        }
+        if(is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers() && !Util.isBlackListed(is)) {
+            player.getInventory().setItem(e.getSlot(), new CombatItem(is, player, Language.fromPlayer(player)).getUpdatedItem());
+        }
+    }
+
+    /**
+     * Remove default netherite armor knockback resistance by adding an opposite custom
+     * knockback resistance attribute modifier
+     * @param is The itemStack
+     * @param inv The inventory
+     * @param slot The item slot
+     */
+    public static void removeNetheriteKbResistance(ItemStack is, Inventory inv, int slot) {
+        if(CombatItem.Type.retrieveItemType(is) != CombatItem.Type.ARMOR_PIECE) return;
+        ItemArmor itemArmor = (ItemArmor) CraftItemStack.asNMSCopy(is).d();
+        if(itemArmor.d() != EnumArmorMaterial.g) return;
+        ItemMeta im = is.getItemMeta();
+
+        // Return if kb has already been removed
+        if(im.hasAttributeModifiers()) {
+            for(AttributeModifier attribute : im.getAttributeModifiers(Attribute.GENERIC_KNOCKBACK_RESISTANCE)) {
+                if(attribute.getName().equalsIgnoreCase("remove_netheritekbresistance")) {
+                    return;
+                }
+            }
+        }
+
+        double kbResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
+        if(kbResistance > 0) {
+            im.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+                    new AttributeModifier(UUID.randomUUID(), "remove_netheritekbresistance", -kbResistance, AttributeModifier.Operation.ADD_NUMBER, is.getType().getEquipmentSlot()));
+        }
+        is.setItemMeta(im);
+        inv.setItem(slot, is);
     }
 
 }

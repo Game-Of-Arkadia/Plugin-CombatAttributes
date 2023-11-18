@@ -96,7 +96,7 @@ public class CombatItem {
         switch (type) {
             case WEAPON -> {
                 combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.mainhand", language));
-                combatAttributes.add(" §2" + df.format(CombatCalculator.getAttackDamage(nmsItem, owner)) + " " + MCTranslator.translate("attribute.name.generic.attack_damage", language));
+                combatAttributes.add(" §2" + df.format(CombatCalculator.getAttackDamage(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.attack_damage", language));
                 combatAttributes.add(" §2" + df.format(CombatCalculator.getAttackSpeed(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.attack_speed", language));
             }
             case ARMOR_PIECE -> {
@@ -143,6 +143,7 @@ public class CombatItem {
 
         for(Map.Entry<org.bukkit.attribute.Attribute, AttributeModifier> attribute : itemStack.getItemMeta().getAttributeModifiers().entries()) {
             if(attribute.getValue().getName().startsWith("fix_")) continue;
+            if(attribute.getValue().getName().equals("remove_netheritekbresistance")) continue;
             if(type.equals(Type.ARMOR_PIECE)) {
                 List<String> invisibleAttributes = List.of("generic.armor", "generic.armor_toughness", "generic.knockback_resistance");
                 if (invisibleAttributes.contains(attribute.getKey().getKey().getKey())) continue;

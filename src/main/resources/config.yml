@@ -5,6 +5,9 @@ messages:
   item-updated: " &aVotre item a bien été mis à jour. Vous pouvez passer votre souris sur ce message pour visualiser l'ancien item."
   bruteforce-update: " &eVous venez de forcer la mise à jour d'un item dont le matériau est blacklisté du plugin."
 
+config:
+  remove-netherite-kb-resistance: true
+
 # Plugin blacklist
 # A blacklisted item can be force updated with the /fix-attributes command, but
 # it will not be updated automatically when the different events are called.

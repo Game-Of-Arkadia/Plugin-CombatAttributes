@@ -1,5 +1,6 @@
 package fr.keykatyu.combatattributes.command;
 
+import fr.keykatyu.combatattributes.listener.CombatAttributesListener;
 import fr.keykatyu.combatattributes.object.CombatItem;
 import fr.keykatyu.combatattributes.util.Config;
 import fr.keykatyu.combatattributes.util.Util;
@@ -23,6 +24,10 @@ public class FixAttributesCommand implements CommandExecutor {
         }
 
         ItemStack previousItem = player.getInventory().getItemInMainHand();
+        if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+            CombatAttributesListener.removeNetheriteKbResistance(previousItem, player.getInventory(), player.getInventory().getHeldItemSlot());
+        }
+
         if(!Util.isCustomItem(previousItem)) {
             sender.sendMessage(Util.prefix() + Config.getString("messages.not-custom-item"));
             return false;
