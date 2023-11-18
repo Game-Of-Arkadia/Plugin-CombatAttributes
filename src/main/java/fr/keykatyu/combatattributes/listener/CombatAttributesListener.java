@@ -19,10 +19,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.SmithingInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -121,6 +123,26 @@ public class CombatAttributesListener implements Listener {
             }
         }
         player.getInventory().setContents(items);
+    }
+
+    /**
+     * Update item in smithing table with the new stats lore
+     * @param e The event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onItemSmithingTable(PrepareSmithingEvent e) {
+        if(e.getViewers().isEmpty()) return;
+        Player player = (Player) e.getViewers().get(0);
+        SmithingInventory inventory = e.getInventory();
+        if(inventory.getItem(0) == null || inventory.getItem(1) == null || inventory.getItem(2) == null) return;
+
+        ItemStack is = inventory.getItem(3).clone();
+        if(Util.hasNetheriteKBResistanceToBeRemoved()) {
+            removeNetheriteKbResistance(is, e.getInventory(), 3);
+        }
+        if(!Util.isCustomItem(is)) return;
+        if(Util.isBlackListed(is)) return;
+        e.setResult(new CombatItem(is, player).getUpdatedItem());
     }
 
     /**
