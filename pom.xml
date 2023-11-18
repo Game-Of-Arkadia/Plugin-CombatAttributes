@@ -6,7 +6,7 @@
 
     <groupId>fr.keykatyu</groupId>
     <artifactId>CombatAttributes</artifactId>
-    <version>1.1.1-release</version>
+    <version>1.1.2-release</version>
     <packaging>jar</packaging>
 
     <name>CombatAttributes</name>
