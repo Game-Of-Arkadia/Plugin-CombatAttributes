@@ -1,7 +1,7 @@
 package fr.keykatyu.combatattributes.command;
 
+import fr.keykatyu.combatattributes.combat.CombatItem;
 import fr.keykatyu.combatattributes.listener.CombatAttributesListener;
-import fr.keykatyu.combatattributes.object.CombatItem;
 import fr.keykatyu.combatattributes.util.Config;
 import fr.keykatyu.combatattributes.util.Util;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -35,7 +35,7 @@ public class FixAttributesCommand implements CommandExecutor {
 
         if(Util.isBlackListed(previousItem)) sender.sendMessage(Util.prefix() + Config.getString("messages.bruteforce-update"));
 
-        ItemStack newItem = new CombatItem(player.getInventory().getItemInMainHand().clone(), player).getUpdatedItem();
+        ItemStack newItem = new CombatItem(player.getInventory().getItemInMainHand().clone(), player, true).getUpdatedItem();
         player.getInventory().setItemInMainHand(newItem);
         TextComponent textComponent = new TextComponent();
         textComponent.setText(Util.prefix() + Config.getString("messages.item-updated"));

@@ -149,6 +149,20 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder updateAttributeModifierValue(Attribute attribute, String name, double value) {
+        ItemMeta im = is.getItemMeta();
+        for(AttributeModifier attributeModifier : im.getAttributeModifiers(attribute)) {
+            if(attributeModifier.getName().equals(name)) {
+                im.removeAttributeModifier(attribute, attributeModifier);
+                im.addAttributeModifier(attribute, new AttributeModifier(attributeModifier.getUniqueId(),
+                        name, value, attributeModifier.getOperation(), attributeModifier.getSlot()));
+
+            }
+        }
+        is.setItemMeta(im);
+        return this;
+    }
+
     public ItemStack toItemStack() {
         return is;
     }

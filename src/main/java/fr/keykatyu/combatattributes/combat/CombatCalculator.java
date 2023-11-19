@@ -1,4 +1,4 @@
-package fr.keykatyu.combatattributes.object;
+package fr.keykatyu.combatattributes.combat;
 
 import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeBase;
@@ -30,7 +30,9 @@ public class CombatCalculator {
      */
     public static double getAttackDamage(net.minecraft.world.item.ItemStack item) {
         double attackDamage = 1.0;
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) attackDamage += modifier.d();
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) {
+            attackDamage += modifier.d();
+        }
         attackDamage += net.minecraft.world.item.enchantment.EnchantmentManager.a(item, null);
         attackDamage = Math.round(attackDamage * 10.0) / 10.0;
         return attackDamage;

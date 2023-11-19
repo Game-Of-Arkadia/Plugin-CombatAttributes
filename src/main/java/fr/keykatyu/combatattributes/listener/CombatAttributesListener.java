@@ -1,8 +1,8 @@
 package fr.keykatyu.combatattributes.listener;
 
 import com.ssomar.score.api.executableitems.events.AddItemInPlayerInventoryEvent;
-import fr.keykatyu.combatattributes.object.CombatCalculator;
-import fr.keykatyu.combatattributes.object.CombatItem;
+import fr.keykatyu.combatattributes.combat.CombatCalculator;
+import fr.keykatyu.combatattributes.combat.CombatItem;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
 import fr.keykatyu.combatattributes.util.Util;
 import fr.keykatyu.mctranslation.api.Language;
@@ -46,7 +46,7 @@ public class CombatAttributesListener implements Listener {
         if(Util.isBlackListed(is)) return;
         ItemBuilder ib = new ItemBuilder(is);
         e.getEnchantsToAdd().forEach(ib::addEnchant);
-        e.getInventory().setItem(0, new CombatItem(ib.toItemStack(), e.getEnchanter()).getUpdatedItem());
+        e.getInventory().setItem(0, new CombatItem(ib.toItemStack(), e.getEnchanter(), false).getUpdatedItem());
     }
 
     /**
@@ -84,7 +84,7 @@ public class CombatAttributesListener implements Listener {
 
         ItemBuilder ib = new ItemBuilder(is.clone());
         meta.getStoredEnchants().forEach(ib::addUnsafeEnchant);
-        e.setResult(new CombatItem(ib.toItemStack(), player).getUpdatedItem());
+        e.setResult(new CombatItem(ib.toItemStack(), player, false).getUpdatedItem());
     }
 
     /**
@@ -100,7 +100,7 @@ public class CombatAttributesListener implements Listener {
         }
         if(!Util.isCustomItem(is)) return;
         if(Util.isBlackListed(e.getItem())) return;
-        CombatItem combatItem = new CombatItem(is, player);
+        CombatItem combatItem = new CombatItem(is, player, false);
         player.getInventory().setItem(e.getSlot(), combatItem.getUpdatedItem());
     }
 
@@ -119,7 +119,7 @@ public class CombatAttributesListener implements Listener {
                 removeNetheriteKbResistance(is, player.getInventory(), i);
             }
             if(is.getItemMeta().hasAttributeModifiers() && !Util.isBlackListed(is)) {
-                items[i] = new CombatItem(is, player, Language.fromLocale(e.getLocale())).getUpdatedItem();
+                items[i] = new CombatItem(is, player, Language.fromLocale(e.getLocale()), false).getUpdatedItem();
             }
         }
         player.getInventory().setContents(items);
@@ -142,7 +142,7 @@ public class CombatAttributesListener implements Listener {
         }
         if(!Util.isCustomItem(is)) return;
         if(Util.isBlackListed(is)) return;
-        e.setResult(new CombatItem(is, player).getUpdatedItem());
+        e.setResult(new CombatItem(is, player, true).getUpdatedItem());
     }
 
     /**
@@ -159,7 +159,7 @@ public class CombatAttributesListener implements Listener {
             removeNetheriteKbResistance(is, player.getInventory(), e.getSlot());
         }
         if(is.hasItemMeta() && is.getItemMeta().hasAttributeModifiers() && !Util.isBlackListed(is)) {
-            player.getInventory().setItem(e.getSlot(), new CombatItem(is, player, Language.fromPlayer(player)).getUpdatedItem());
+            player.getInventory().setItem(e.getSlot(), new CombatItem(is, player, Language.fromPlayer(player), false).getUpdatedItem());
         }
     }
 

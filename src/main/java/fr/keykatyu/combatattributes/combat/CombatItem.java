@@ -1,4 +1,4 @@
-package fr.keykatyu.combatattributes.object;
+package fr.keykatyu.combatattributes.combat;
 
 import fr.keykatyu.combatattributes.Main;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
@@ -28,17 +28,20 @@ public class CombatItem {
     private final Player owner;
     private final Language language;
     private static final DecimalFormat df = new DecimalFormat("0.##", DecimalFormatSymbols.getInstance(Locale.US));
+    private final boolean refreshFixers;
 
-    public CombatItem(ItemStack item, Player owner) {
+    public CombatItem(ItemStack item, Player owner, boolean refreshFixers) {
         this.itemStack = item;
+        this.refreshFixers = refreshFixers;
         type = Type.retrieveItemType(itemStack);
         ib = new ItemBuilder(item);
         this.owner = owner;
         language = Language.fromPlayer(owner);
     }
 
-    public CombatItem(ItemStack item, Player owner, Language language) {
+    public CombatItem(ItemStack item, Player owner, Language language, boolean refreshFixers) {
         this.itemStack = item;
+        this.refreshFixers = refreshFixers;
         type = Type.retrieveItemType(itemStack);
         ib = new ItemBuilder(item);
         this.owner = owner;
@@ -58,6 +61,31 @@ public class CombatItem {
             int combatAttributesLines = itemStack.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Main.getInstance(), "CombatAttributesLore"), PersistentDataType.INTEGER);
             if (combatAttributesLines > 0 && combatAttributesLines <= lore.size()) {
                 lore.subList(lore.size() - combatAttributesLines, lore.size()).clear();
+            }
+            if(refreshFixers) {
+                Item item = CraftItemStack.asNMSCopy(itemStack).d();
+                switch (type) {
+                    case WEAPON -> {
+                        double attackDamageBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.f);
+                        double attackSpeedBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.h);
+                        ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE, "fix_attackdamage", attackDamageBonus);
+                        ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED, "fix_attackspeed", attackSpeedBonus);
+                    }
+                    case ARMOR_PIECE -> {
+                        ItemArmor itemArmor = (ItemArmor) item;
+                        double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
+                        ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ARMOR, "fix_armor", armorBonus);
+
+                        if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
+                            double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
+                            ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS, "fix_armortoughness", armorToughnessBonus);
+                            if(itemArmor.d() == EnumArmorMaterial.g) {
+                                double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
+                                ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE, "fix_knockbackresistance", knockbackResistance);
+                            }
+                        }
+                    }
+                }
             }
         } else if(itemStack.getItemMeta().hasAttributeModifiers()) {
             Item item = CraftItemStack.asNMSCopy(itemStack).d();
