@@ -28,6 +28,7 @@ import org.bukkit.inventory.SmithingInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public class CombatAttributesListener implements Listener {
@@ -178,9 +179,12 @@ public class CombatAttributesListener implements Listener {
 
         // Return if kb has already been removed
         if(im.hasAttributeModifiers()) {
-            for(AttributeModifier attribute : im.getAttributeModifiers(Attribute.GENERIC_KNOCKBACK_RESISTANCE)) {
-                if(attribute.getName().equalsIgnoreCase("remove_netheritekbresistance")) {
-                    return;
+            Collection<AttributeModifier> attributeModifiers = im.getAttributeModifiers(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+            if(attributeModifiers != null) {
+                for(AttributeModifier attribute : attributeModifiers) {
+                    if(attribute.getName().equalsIgnoreCase("remove_netheritekbresistance")) {
+                        return;
+                    }
                 }
             }
         }
