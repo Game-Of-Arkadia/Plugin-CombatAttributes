@@ -1,4 +1,4 @@
-# Plugin CombatAttributes - MC 1.20.2
+# Plugin CombatAttributes - MC 1.20.4
 
 Fix combat item attributes :
 - fix lore
@@ -19,4 +19,4 @@ Fix items attributes and update lore.
 - [How does the plugin work ?](documentation/HOWITWORKS.md)
 
 ## Dependencies
-- **MCTranslator by KeyKatyu**
+- **MCTranslator** by KeyKatyu
