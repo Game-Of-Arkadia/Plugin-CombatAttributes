@@ -5,12 +5,12 @@ import fr.keykatyu.combatattributes.util.ItemBuilder;
 import fr.keykatyu.combatattributes.util.Util;
 import fr.keykatyu.mctranslation.api.Language;
 import fr.keykatyu.mctranslation.api.MCTranslator;
-import net.minecraft.world.entity.EnumItemSlot;
-import net.minecraft.world.entity.ai.attributes.GenericAttributes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -64,25 +64,26 @@ public class CombatItem {
                 lore.subList(lore.size() - combatAttributesLines, lore.size()).clear();
             }
             if(refreshFixers) {
-                Item item = CraftItemStack.asNMSCopy(itemStack).d();
+                Item item = CraftItemStack.asNMSCopy(itemStack).getItem();
                 switch (type) {
                     case WEAPON -> {
-                        double attackDamageBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.f);
-                        double attackSpeedBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.h);
+                        double attackDamageBonus = CombatCalculator.defaultValue(item, net.minecraft.world.entity.EquipmentSlot.MAINHAND, Attributes.ATTACK_DAMAGE);
+                        double attackSpeedBonus = CombatCalculator.defaultValue(item, net.minecraft.world.entity.EquipmentSlot.MAINHAND, Attributes.ATTACK_SPEED);
                         ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE, "fix_attackdamage", attackDamageBonus);
                         ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED, "fix_attackspeed", attackSpeedBonus);
                     }
                     case ARMOR_PIECE -> {
-                        ItemArmor itemArmor = (ItemArmor) item;
-                        double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
+                        ArmorItem itemArmor = (ArmorItem) item;
+                        double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.ARMOR);
                         System.out.println(armorBonus);
                         ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ARMOR, "fix_armor", armorBonus);
 
-                        if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
-                            double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
+                        ArmorMaterial armorMaterial = itemArmor.getMaterial();
+                        if(armorMaterial == ArmorMaterials.DIAMOND || armorMaterial == ArmorMaterials.NETHERITE) {
+                            double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.ARMOR_TOUGHNESS);
                             ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS, "fix_armortoughness", armorToughnessBonus);
-                            if(itemArmor.d() == EnumArmorMaterial.g) {
-                                double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
+                            if(armorMaterial == ArmorMaterials.NETHERITE) {
+                                double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.KNOCKBACK_RESISTANCE);
                                 ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE, "fix_knockbackresistance", knockbackResistance);
                             }
                         }
@@ -90,28 +91,29 @@ public class CombatItem {
                 }
             }
         } else if(itemStack.getItemMeta().hasAttributeModifiers()) {
-            Item item = CraftItemStack.asNMSCopy(itemStack).d();
+            Item item = CraftItemStack.asNMSCopy(itemStack).getItem();
             switch (type) {
                 case WEAPON -> {
-                    double attackDamageBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.f);
-                    double attackSpeedBonus = CombatCalculator.defaultValue(item, EnumItemSlot.a, GenericAttributes.h);
+                    double attackDamageBonus = CombatCalculator.defaultValue(item, net.minecraft.world.entity.EquipmentSlot.MAINHAND, Attributes.ATTACK_DAMAGE);
+                    double attackSpeedBonus = CombatCalculator.defaultValue(item, net.minecraft.world.entity.EquipmentSlot.MAINHAND, Attributes.ATTACK_SPEED);
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE,
                             new AttributeModifier(UUID.randomUUID(), "fix_attackdamage", attackDamageBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED,
                             new AttributeModifier(UUID.randomUUID(), "fix_attackspeed", attackSpeedBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                 }
                 case ARMOR_PIECE -> {
-                    ItemArmor itemArmor = (ItemArmor) item;
-                    double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.i);
+                    ArmorItem itemArmor = (ArmorItem) item;
+                    double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.ARMOR);
                     ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR,
                             new AttributeModifier(UUID.randomUUID(), "fix_armor", armorBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
 
-                    if(itemArmor.d() == EnumArmorMaterial.e || itemArmor.d() == EnumArmorMaterial.g) {
-                        double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.j);
+                    ArmorMaterial armorMaterial = itemArmor.getMaterial();
+                    if(armorMaterial == ArmorMaterials.DIAMOND || armorMaterial == ArmorMaterials.NETHERITE) {
+                        double armorToughnessBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.ARMOR_TOUGHNESS);
                         ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_ARMOR_TOUGHNESS,
                                 new AttributeModifier(UUID.randomUUID(), "fix_armortoughness", armorToughnessBonus, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
-                        if(itemArmor.d() == EnumArmorMaterial.g) {
-                            double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
+                        if(armorMaterial == ArmorMaterials.NETHERITE) {
+                            double knockbackResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.KNOCKBACK_RESISTANCE);
                             ib.addAttributeModifier(org.bukkit.attribute.Attribute.GENERIC_KNOCKBACK_RESISTANCE,
                                     new AttributeModifier(UUID.randomUUID(), "fix_knockbackresistance", knockbackResistance, AttributeModifier.Operation.ADD_NUMBER, itemStack.getType().getEquipmentSlot()));
                         }
@@ -126,16 +128,16 @@ public class CombatItem {
         switch (type) {
             case WEAPON -> {
                 combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.mainhand", language));
-                combatAttributes.add(" §2" + df.format(CombatCalculator.getAttackDamage(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.attack_damage", language));
+                combatAttributes.add(" §2" + df.format(CombatCalculator.getAttackDamage(nmsItem, (CraftPlayer) owner)) + " " + MCTranslator.translate("attribute.name.generic.attack_damage", language));
                 combatAttributes.add(" §2" + df.format(CombatCalculator.getAttackSpeed(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.attack_speed", language));
             }
             case ARMOR_PIECE -> {
-                ItemArmor itemArmor = (ItemArmor) nmsItem.d();
-                switch (itemArmor.b()) {
-                    case d -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.feet", language));
-                    case c -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.legs", language));
-                    case b -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.chest", language));
-                    case a -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.head", language));
+                ArmorItem itemArmor = (ArmorItem) nmsItem.getItem();
+                switch (itemArmor.getEquipmentSlot()) {
+                    case FEET -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.feet", language));
+                    case LEGS -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.legs", language));
+                    case CHEST -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.chest", language));
+                    case HEAD -> combatAttributes.add("§7" + MCTranslator.translate("item.modifiers.head", language));
                 }
                 combatAttributes.add("§9+" + df.format(CombatCalculator.getArmor(nmsItem)) + " " + MCTranslator.translate("attribute.name.generic.armor", language));
                 double armorToughness = CombatCalculator.getArmorToughness(nmsItem);
@@ -204,10 +206,10 @@ public class CombatItem {
          * @return The type or null if not found
          */
         public static Type retrieveItemType(ItemStack itemStack) {
-            Item item = CraftItemStack.asNMSCopy(itemStack).d();
-            if(item instanceof ItemToolMaterial || item instanceof ItemTrident) {
+            Item item = CraftItemStack.asNMSCopy(itemStack).getItem();
+            if(item instanceof TridentItem || item instanceof TieredItem) {
                 return WEAPON;
-            } else if(item instanceof ItemArmor) {
+            } else if(item instanceof ArmorItem) {
                 return ARMOR_PIECE;
             } else {
                 return null;

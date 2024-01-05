@@ -6,12 +6,12 @@ import fr.keykatyu.combatattributes.combat.CombatItem;
 import fr.keykatyu.combatattributes.util.ItemBuilder;
 import fr.keykatyu.combatattributes.util.Util;
 import fr.keykatyu.mctranslation.api.Language;
-import net.minecraft.world.entity.ai.attributes.GenericAttributes;
-import net.minecraft.world.item.EnumArmorMaterial;
-import net.minecraft.world.item.ItemArmor;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterials;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -173,8 +173,8 @@ public class CombatAttributesListener implements Listener {
      */
     public static void removeNetheriteKbResistance(ItemStack is, Inventory inv, int slot) {
         if(CombatItem.Type.retrieveItemType(is) != CombatItem.Type.ARMOR_PIECE) return;
-        ItemArmor itemArmor = (ItemArmor) CraftItemStack.asNMSCopy(is).d();
-        if(itemArmor.d() != EnumArmorMaterial.g) return;
+        ArmorItem itemArmor = (ArmorItem) CraftItemStack.asNMSCopy(is).getItem();
+        if(itemArmor.getMaterial() != ArmorMaterials.NETHERITE) return;
         ItemMeta im = is.getItemMeta();
 
         // Return if kb has already been removed
@@ -189,7 +189,7 @@ public class CombatAttributesListener implements Listener {
             }
         }
 
-        double kbResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.g(), GenericAttributes.c);
+        double kbResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.KNOCKBACK_RESISTANCE);
         if(kbResistance > 0) {
             im.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
                     new AttributeModifier(UUID.randomUUID(), "remove_netheritekbresistance", -kbResistance, AttributeModifier.Operation.ADD_NUMBER, is.getType().getEquipmentSlot()));

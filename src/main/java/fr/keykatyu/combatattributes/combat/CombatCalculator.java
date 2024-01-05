@@ -1,11 +1,13 @@
 package fr.keykatyu.combatattributes.combat;
 
-import net.minecraft.world.entity.EnumItemSlot;
-import net.minecraft.world.entity.ai.attributes.AttributeBase;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.GenericAttributes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemArmor;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 
 import java.util.List;
 
@@ -18,9 +20,9 @@ public class CombatCalculator {
      * @param attribute The attribute
      * @return The default value
      */
-    public static double defaultValue(Item item, EnumItemSlot slot, AttributeBase attribute) {
-        List<AttributeModifier> modifiers = item.a(slot).get(attribute).stream().toList();
-        return modifiers.get(0).d();
+    public static double defaultValue(Item item, EquipmentSlot slot, Attribute attribute) {
+        List<AttributeModifier> modifiers = item.getDefaultAttributeModifiers(slot).get(attribute).stream().toList();
+        return modifiers.get(0).getAmount();
     }
 
     /**
@@ -28,12 +30,12 @@ public class CombatCalculator {
      * @param item The NMS ItemStack
      * @return The item attack damage
      */
-    public static double getAttackDamage(net.minecraft.world.item.ItemStack item) {
+    public static double getAttackDamage(net.minecraft.world.item.ItemStack item, CraftPlayer craftPlayer) {
         double attackDamage = 1.0;
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.f)) {
-            attackDamage += modifier.d();
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE)) {
+            attackDamage += modifier.getAmount();
         }
-        attackDamage += net.minecraft.world.item.enchantment.EnchantmentManager.a(item, null);
+        attackDamage += EnchantmentHelper.getDamageBonus(item, craftPlayer.getHandle().getMobType());
         attackDamage = Math.round(attackDamage * 10.0) / 10.0;
         return attackDamage;
     }
@@ -45,7 +47,9 @@ public class CombatCalculator {
      */
     public static double getAttackSpeed(net.minecraft.world.item.ItemStack item) {
         double attackSpeed = 4.0;
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(EnumItemSlot.a).get(GenericAttributes.h)) attackSpeed += modifier.d();
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED)) {
+            attackSpeed += modifier.getAmount();
+        }
         attackSpeed = Math.round(attackSpeed * 10.0) / 10.0;
         return attackSpeed;
     }
@@ -57,8 +61,10 @@ public class CombatCalculator {
      */
     public static double getArmor(net.minecraft.world.item.ItemStack item) {
         double armor = 0.0;
-        ItemArmor itemArmor = ((ItemArmor) item.d());
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(itemArmor.g()).get(GenericAttributes.i)) armor += modifier.d();
+        ArmorItem itemArmor = ((ArmorItem) item.getItem());
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.getAttributeModifiers(itemArmor.getEquipmentSlot()).get(Attributes.ARMOR)) {
+            armor += modifier.getAmount();
+        }
         armor = Math.round(armor * 10.0) / 10.0;
         return armor;
     }
@@ -70,8 +76,10 @@ public class CombatCalculator {
      */
     public static double getArmorToughness(net.minecraft.world.item.ItemStack item) {
         double armorToughness = 0.0;
-        ItemArmor itemArmor = ((ItemArmor) item.d());
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(itemArmor.g()).get(GenericAttributes.j)) armorToughness += modifier.d();
+        ArmorItem itemArmor = ((ArmorItem) item.getItem());
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.getAttributeModifiers(itemArmor.getEquipmentSlot()).get(Attributes.ARMOR_TOUGHNESS)) {
+            armorToughness += modifier.getAmount();
+        }
         armorToughness = Math.round(armorToughness * 10.0) / 10.0;
         return armorToughness;
     }
@@ -83,10 +91,9 @@ public class CombatCalculator {
      */
     public static double getKnockbackResistance(net.minecraft.world.item.ItemStack item) {
         double knockbackResistance = 0.0;
-        ItemArmor itemArmor = ((ItemArmor) item.d());
-
-        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.a(itemArmor.g()).get(GenericAttributes.c)) {
-            knockbackResistance += modifier.d();
+        ArmorItem itemArmor = ((ArmorItem) item.getItem());
+        for(net.minecraft.world.entity.ai.attributes.AttributeModifier modifier : item.getAttributeModifiers(itemArmor.getEquipmentSlot()).get(Attributes.KNOCKBACK_RESISTANCE)) {
+            knockbackResistance += modifier.getAmount();
         }
         knockbackResistance = Math.round(knockbackResistance * 10.0);
         return knockbackResistance;
