@@ -75,7 +75,6 @@ public class CombatItem {
                     case ARMOR_PIECE -> {
                         ArmorItem itemArmor = (ArmorItem) item;
                         double armorBonus = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.ARMOR);
-                        System.out.println(armorBonus);
                         ib.updateAttributeModifierValue(org.bukkit.attribute.Attribute.GENERIC_ARMOR, "fix_armor", armorBonus);
 
                         ArmorMaterial armorMaterial = itemArmor.getMaterial();
