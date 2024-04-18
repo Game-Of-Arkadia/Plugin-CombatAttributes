@@ -19,7 +19,7 @@ public class FixAttributesCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player player)) {
-            sender.sendMessage(Util.prefix() + Main.getLang().get("messages.must-be-player"));
+            sender.sendMessage(Util.prefix() + Main.getLang().get("must-be-player"));
             return false;
         }
 
@@ -29,16 +29,16 @@ public class FixAttributesCommand implements CommandExecutor {
         }
 
         if(!Util.isCustomItem(previousItem)) {
-            sender.sendMessage(Util.prefix() + Main.getLang().get("messages.not-custom-item"));
+            sender.sendMessage(Util.prefix() + Main.getLang().get("not-custom-item"));
             return false;
         }
 
-        if(Util.isBlackListed(previousItem)) sender.sendMessage(Util.prefix() + Main.getLang().get("messages.bruteforce-update"));
+        if(Util.isBlackListed(previousItem)) sender.sendMessage(Util.prefix() + Main.getLang().get("bruteforce-update"));
 
         ItemStack newItem = new CombatItem(player.getInventory().getItemInMainHand().clone(), player, true).getUpdatedItem();
         player.getInventory().setItemInMainHand(newItem);
         TextComponent textComponent = new TextComponent();
-        textComponent.setText(Util.prefix() + Main.getLang().get("messages.item-updated"));
+        textComponent.setText(Util.prefix() + Main.getLang().get("item-updated"));
         textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
                 new Item(previousItem.getType().getKey().toString(), previousItem.getAmount(),
                         ItemTag.ofNbt(previousItem.getItemMeta().getAsString()))));
