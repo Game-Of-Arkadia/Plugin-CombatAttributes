@@ -20,9 +20,12 @@
 
 ## How it works
 
+The plugin uses NMS
+
 ### When are the items updated ?
 
 > The items are not updated all the time, but they are updated automatically, when :
+- a player changes its **game language**
 - a player run the **/fix-attributes** command with the item in the hand.
 - an **enchantment book** is applied in an **anvil**.
 - an **enchantment** is applied in an **enchantment table**.*
