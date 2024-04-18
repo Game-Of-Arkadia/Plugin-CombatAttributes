@@ -28,8 +28,8 @@ The plugin uses NMS
 - a player changes its **game language**
 - a player run the **/fix-attributes** command with the item in the hand.
 - an **enchantment book** is applied in an **anvil**.
-- an **enchantment** is applied in an **enchantment table**.*
-- the item is given by **a moderator who used /ei give** command or the **EI Editor menu**
+- an **enchantment** is applied in an **enchantment table**.
+- (ExecutableItems dependency) the item is given by **a moderator who used /ei give** command or the **EI Editor menu**
 
 ### Does this apply to all items ?
 
@@ -51,4 +51,4 @@ Fix items attributes and update lore (not mandatory).
 **Nothing.**
 
 ## Dependencies
-- **MCTranslator** by KeyKatyu
+- **MCTranslationLib** by KeyKatyu
