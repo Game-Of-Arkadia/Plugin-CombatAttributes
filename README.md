@@ -8,11 +8,15 @@
 
 ## Features
 
-- Fix **lore** (damage points, attack speed)  
-- Fix **attack damage** and **attack speed** on **weapons with attributes**  
-- Fix **armor**, **armor toughness** and **knockback resistance** on **armor pieces with attributes**
-- **Remove** (and not deactivate) **knockback resistance** on **netherite armors**
-- **[ExecutableItems](https://www.spigotmc.org/resources/custom-items-plugin-executable-items.77578/)** support (soft depend)
+### 🚧 Fix
+- **Lore** (damage points, attack speed)  
+- **Attack damage** and **attack speed** on **weapons with attributes**  
+- **Armor**, **armor toughness** and **knockback resistance** on **armor pieces with attributes**
+
+### 🚫 Remove
+- **Knockback resistance** on **netherite armors**
+
+**[ExecutableItems](https://www.spigotmc.org/resources/custom-items-plugin-executable-items.77578/)** support _(soft dependency)_
 
 ## How it works
 
