@@ -10,7 +10,7 @@ public class Util {
      * @return The prefix
      */
     public static String prefix() {
-        return Config.getString("messages.prefix") + " ";
+        return Main.getLang().get("messages.prefix") + " ";
     }
 
     /**
@@ -42,7 +42,7 @@ public class Util {
     }
 
     public static boolean hasNetheriteKBResistanceToBeRemoved() {
-        return Config.getBoolean("config.remove-netherite-kb-resistance");
+        return Config.getBoolean("remove-netherite-kb-resistance");
     }
 
 }

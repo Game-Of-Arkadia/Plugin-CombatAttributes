@@ -1,12 +1,11 @@
-messages:
-  prefix: "&7[&f&lCombatAttributes&7]"
-  must-be-player: "&cVous devez être un joueur pour exécuter cette commande."
-  not-custom-item: "&cCet item n'est pas un item custom."
-  item-updated: " &aVotre item a bien été mis à jour. Vous pouvez passer votre souris sur ce message pour visualiser l'ancien item."
-  bruteforce-update: " &eVous venez de forcer la mise à jour d'un item dont le matériau est blacklisté du plugin."
+# Name of the file (without its extension) in "lang" directory,
+# that will be used for the messages translations.
+# You can create a custom file, with your language, inside the directory and use it there.
+language: en
 
-config:
-  remove-netherite-kb-resistance: true
+# If it's true, the plugin will remove kb resistance
+# on all netherite armor items.
+remove-netherite-kb-resistance: true
 
 # Plugin blacklist
 # A blacklisted item can be force updated with the /fix-attributes command, but

@@ -1,0 +1,5 @@
+prefix: "&7[&f&lCombatAttributes&7]"
+must-be-player: "&cYou must be a player to execute this command!"
+not-custom-item: "&cThis item isn't a custom item."
+item-updated: " &aYour item has been updated. You can move your mouse over this message to view the old item."
+bruteforce-update: " &eYou have just forced the update of an item whose material is blacklisted from the plugin."

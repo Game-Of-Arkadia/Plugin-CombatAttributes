@@ -4,7 +4,7 @@ main: fr.keykatyu.combatattributes.Main
 api-version: '1.20'
 authors: [KeyKatyu]
 description: '${project.description}'
-depend:
+softdepend:
   - ExecutableItems
   - SCore
 commands:
