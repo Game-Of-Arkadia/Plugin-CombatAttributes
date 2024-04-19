@@ -1,5 +1,7 @@
 <img src="banner.png" alt="CombatAttributes Banner">
 
+_The plugin is licensed under AGPL-3.0_
+
 **Fix combat items attributes : solve a logical combat design problem that Mojang refuses to tackle!**
 > Languages available :
 > - **English** (default) 🇬🇧 🇺🇸
@@ -29,6 +31,7 @@ The plugin uses NMS
 - a player run the **/fix-attributes** command with the item in the hand.
 - an **enchantment book** is applied in an **anvil**.
 - an **enchantment** is applied in an **enchantment table**.
+- (Knockback resistance netherite) a player **takes a netherite armor piece from the creative inventory**.
 - (ExecutableItems dependency) the item is given by **a moderator who used /ei give** command or the **EI Editor menu**
 
 ### Does this apply to all items ?
