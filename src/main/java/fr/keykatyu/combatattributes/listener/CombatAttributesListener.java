@@ -1,4 +1,3 @@
-
 /*
  * CombatAttributes plugin to remove custom combat items attributes
  * Copyright (C) 2024 KeyKatyu (Antoine D.)
@@ -22,7 +21,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -204,7 +203,7 @@ public class CombatAttributesListener implements Listener {
             }
         }
 
-        double kbResistance = CombatCalculator.defaultValue(itemArmor, itemArmor.getEquipmentSlot(), Attributes.KNOCKBACK_RESISTANCE);
+        double kbResistance = CombatCalculator.defaultValue(CombatItem.Type.ARMOR_PIECE, itemArmor, itemArmor.getEquipmentSlot(), Attributes.KNOCKBACK_RESISTANCE.value());
         if(kbResistance > 0) {
             im.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
                     new AttributeModifier(UUID.randomUUID(), "remove_netheritekbresistance", -kbResistance, AttributeModifier.Operation.ADD_NUMBER, is.getType().getEquipmentSlot()));

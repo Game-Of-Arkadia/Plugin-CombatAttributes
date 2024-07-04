@@ -6,7 +6,7 @@
 
     <groupId>fr.keykatyu</groupId>
     <artifactId>CombatAttributes</artifactId>
-    <version>1.1.4-release</version>
+    <version>1.1.5-release</version>
     <packaging>jar</packaging>
 
     <name>CombatAttributes</name>
@@ -15,7 +15,7 @@
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <remapped.version>1.20.4-R0.1-SNAPSHOT</remapped.version>
+        <remapped.version>1.20.6-R0.1-SNAPSHOT</remapped.version>
 
         <maven.build.timestamp.format>yy-MM-dd</maven.build.timestamp.format>
         <buildNumber>${maven.build.timestamp}</buildNumber>
